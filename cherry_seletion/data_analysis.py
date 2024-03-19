@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument("--start_idx", type=int, default=0)
     parser.add_argument("--end_idx", type=int, default=-1)
     parser.add_argument("--prompt", type=str, default="alpaca", help="wiz, alpaca")
-    parser.add_argument("--mod", type=str, default="pre", help="pre, cherry")
+    parser.add_argument("--mod", type=str, default="cherry", help="pre, cherry")
     args = parser.parse_args()
     return args
 
@@ -123,7 +123,8 @@ def main():
 
     if os.path.exists(args.save_path):
         print("save_path exists!")
-        raise Exception
+        print("Warning: save_path already exists! Results will be overwritten.")
+
     else:
         # Extract directory path from the save_path
         save_directory = os.path.dirname(args.save_path)
