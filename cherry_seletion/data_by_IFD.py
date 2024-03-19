@@ -3,6 +3,7 @@ import json
 import numpy as np
 import argparse
 from tqdm import tqdm
+import pandas as pd
 
 PROMPT_DICT = {
     "prompt_input": (
@@ -73,6 +74,11 @@ def main():
     mean_rate_list = []
     mean_list_1 = []
     mean_list_2 = []
+
+    # Create an empty DataFrame to store sample information
+    df_columns = ["instruction", "input", "output", "mean_rate", "mean_1", "mean_2"]
+    df_data = []
+
     for i in tqdm(range(len(pt_data))):
 
         pt_data_i = pt_data[i]
@@ -138,6 +144,8 @@ def main():
             mean_list_1.append((mean_1, i))
             mean_list_2.append((mean_2, i))
 
+            # Add sample information to the DataFrame
+            df_data.append([instruct_i, input_i, output_i, mean_rate, mean_1, mean_2])
         else:
             continue
 
@@ -154,6 +162,12 @@ def main():
     with open(args.json_save_path, "w") as fw:
         json.dump(new_data, fw, indent=4)
 
+    # Create DataFrame from collected data
+    df = pd.DataFrame(df_data, columns=df_columns)
 
+    # Save DataFrame to a CSV file
+    df.to_csv('sample_info.csv', index=False)
+
+    print("DataFrame saved successfully.")
 if __name__ == "__main__":
     main()

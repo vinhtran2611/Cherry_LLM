@@ -48,7 +48,10 @@ def parse_args():
 def get_perplexity_and_embedding_whole_text(tokenizer, model, text, max_length):
 
     input_ids = tokenizer.encode(
-        text, return_tensors="pt", truncation=True, max_length=max_length
+        text, 
+        return_tensors="pt", 
+        truncation=True, 
+        max_length=max_length
     ).to(device)
 
     with torch.no_grad():
@@ -69,7 +72,9 @@ def get_perplexity_and_embedding_part_text(
 ):
 
     input_ids = tokenizer.encode(
-        text, return_tensors="pt", truncation=True, max_length=max_length
+        text, return_tensors="pt", 
+        truncation=True, 
+        max_length=max_length
     ).to(device)
 
     start_index = text.rfind(target_span)
@@ -122,7 +127,6 @@ def main():
         args.save_path += ".pt"
 
     if os.path.exists(args.save_path):
-        print("save_path exists!")
         print("Warning: save_path already exists! Results will be overwritten.")
 
     else:
@@ -196,12 +200,12 @@ def main():
                 output_i,
                 args.max_length - instruct_i_len + 4,
             )
-            (
-                ppl_out_condition,
-                _,
-                loss_list_condition,
-            ) = get_perplexity_and_embedding_part_text(
-                tokenizer, model, whole_text, output_i, args.max_length
+            ppl_out_condition, _, loss_list_condition = get_perplexity_and_embedding_part_text(
+                tokenizer, 
+                model, 
+                whole_text, 
+                output_i, 
+                args.max_length
             )
 
             temp_data_i["ppl"] = [0, ppl_out_alone, ppl_out_condition]
