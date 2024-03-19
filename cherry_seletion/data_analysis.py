@@ -4,6 +4,7 @@ import torch
 import argparse
 from tqdm import tqdm
 
+
 import torch.nn as nn
 log_softmax = nn.LogSoftmax(dim=-1)
 nll_loss = nn.NLLLoss(reduction='none')
@@ -34,7 +35,7 @@ def parse_args():
     parser.add_argument("--max_length", type=int, default=512)
     parser.add_argument("--start_idx", type=int, default=0)
     parser.add_argument("--end_idx", type=int, default=-1)
-    parser.add_argument("--prompt", type=str, default='wiz', help='wiz, alpaca')
+    parser.add_argument("--prompt", type=str, default='alpaca', help='wiz, alpaca')
     parser.add_argument("--mod", type=str, default='pre', help='pre, cherry')
     args = parser.parse_args()
     return args
@@ -89,9 +90,9 @@ def main():
     args = parse_args()
     print(args)
 
-    from transformers import LlamaTokenizer, LlamaForCausalLM
-    model = LlamaForCausalLM.from_pretrained(args.model_name_or_path, device_map="auto", cache_dir='../cache', output_hidden_states=True)
-    tokenizer = LlamaTokenizer.from_pretrained(args.model_name_or_path, cache_dir='../cache')
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path, device_map="auto", cache_dir='../cache', output_hidden_states=True)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, cache_dir='../cache')
 
     model.eval()
 
