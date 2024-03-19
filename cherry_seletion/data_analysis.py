@@ -111,7 +111,7 @@ def main():
         token=args.hf_token,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name_or_path, 
+        args.model_name_or_path,
         # cache_dir="../cache",
         token=args.hf_token,
     )
