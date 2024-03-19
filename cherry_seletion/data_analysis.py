@@ -108,20 +108,29 @@ def main():
         device_map="auto",
         # cache_dir="../cache",
         output_hidden_states=True,
-        use_auth_token=args.hf_token,
+        token=args.hf_token,
     )
     tokenizer = AutoTokenizer.from_pretrained(
         args.model_name_or_path, 
-        # cache_dir="../cache"
+        # cache_dir="../cache",
+        token=args.hf_token,
     )
 
     model.eval()
 
     if args.save_path[-3:] != ".pt":
         args.save_path += ".pt"
+
     if os.path.exists(args.save_path):
         print("save_path exists!")
         raise Exception
+    else:
+        # Extract directory path from the save_path
+        save_directory = os.path.dirname(args.save_path)
+
+        # Create the directory if it doesn't exist
+        if not os.path.exists(save_directory):
+            os.makedirs(save_directory)
 
     with open(args.data_path, "r") as f:
         data = json.load(f)
