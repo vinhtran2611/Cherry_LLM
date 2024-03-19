@@ -30,6 +30,7 @@ PROMPT_DICT = {
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, required=True)
+    parser.add_argument("--hf_token", type=str, required=False)
     parser.add_argument("--save_path", type=str, required=True)
     parser.add_argument("--model_name_or_path", type=str, required=True)
     parser.add_argument("--max_length", type=int, default=512)
@@ -91,7 +92,11 @@ def main():
     print(args)
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path, device_map="auto", cache_dir='../cache', output_hidden_states=True)
+    model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path, 
+                                                 device_map="auto", 
+                                                 cache_dir='../cache', 
+                                                 output_hidden_states=True
+                                                 use_auth_token = args.hf_token)
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, cache_dir='../cache')
 
     model.eval()
