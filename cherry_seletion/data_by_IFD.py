@@ -50,6 +50,7 @@ def parse_args():
     parser.add_argument("--sample_rate", type=float, default=0.1)
     parser.add_argument("--sample_number", type=int, default=0)
     parser.add_argument("--prompt", type=str, default="alpaca", help="wiz, alpaca")
+    parser.add_argument("--anchor", type=str,  default="anchor", help="anchor, normal")
     args = parser.parse_args()
     return args
 
@@ -153,19 +154,21 @@ def main():
     mean_rate_list = sorted(mean_rate_list)
     if args.sample_number == 0:
         args.sample_number = int(len(mean_rate_list) * args.sample_rate)
-    mean_rate_list_id = [i for i in range(len(mean_rate_list))][-args.sample_number :]
-    mean_rate_list_id_sample = [mean_rate_list[id][1] for id in mean_rate_list_id]
-    mean_rate_list_id_sample = sorted(mean_rate_list_id_sample)
+        
+    if args.anchor == 'anchor':
+        anchor_sample = int(args.sample_number * 0.2)
+        combined_samples = mean_rate_list[:anchor_sample] + mean_rate_list[-(args.sample_number - anchor_sample):]
+        mean_rate_list_id_sample = [x[1] for x in combined_samples]
+    else:
+        mean_rate_list_id_sample = [x[1] for x in mean_rate_list[-args.sample_number:]]
 
     new_data = [json_data[idx] for idx in mean_rate_list_id_sample]
     print("New data len \n", len(new_data))
     with open(args.json_save_path, "w") as fw:
         json.dump(new_data, fw, indent=4)
 
-    # Create DataFrame from collected data
+    # Create and save DataFrame to a CSV file
     df = pd.DataFrame(df_data, columns=df_columns)
-
-    # Save DataFrame to a CSV file
     df.to_csv('sample_info.csv', index=False)
 
     print("DataFrame saved successfully.")
