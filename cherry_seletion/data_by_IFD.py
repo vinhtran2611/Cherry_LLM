@@ -169,7 +169,8 @@ def main():
 
     # Create and save DataFrame to a CSV file
     df = pd.DataFrame(df_data, columns=df_columns)
-    df.to_csv('sample_info.csv', index=False)
+    csv_path = args.json_save_path.repace(".json", ".csv")
+    df.to_csv(csv_path, index=False)
 
     print("DataFrame saved successfully.")
 if __name__ == "__main__":
