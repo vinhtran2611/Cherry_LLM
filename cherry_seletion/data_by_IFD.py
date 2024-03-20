@@ -51,6 +51,7 @@ def parse_args():
     parser.add_argument("--sample_number", type=int, default=0)
     parser.add_argument("--prompt", type=str, default="alpaca", help="wiz, alpaca")
     parser.add_argument("--mod", type=str,  default="anchor", help="anchor, normal")
+    parser.add_argument("--anchor_rate", type=float,  default=0.2)
     args = parser.parse_args()
     return args
 
@@ -156,7 +157,7 @@ def main():
         args.sample_number = int(len(mean_rate_list) * args.sample_rate)
         
     if args.mod == 'anchor':
-        anchor_sample = int(args.sample_number * 0.2)
+        anchor_sample = int(args.sample_number * args.anchor_rate)
         combined_samples = mean_rate_list[:anchor_sample] + mean_rate_list[-(args.sample_number - anchor_sample):]
         mean_rate_list_id_sample = [x[1] for x in combined_samples]
     else:
